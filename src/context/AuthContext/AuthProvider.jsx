@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
             if (currentUser?.email) {
                 const user = { email: currentUser.email }
 
-                axios.post('http://localhost:5000/jwt', user, {
+                axios.post('https://job-portal-server-for-recruiter-part3-swart.vercel.app/jwt', user, {
                     withCredentials: true
                 })
                     .then(res => {
@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
 
             // when the user logs out, the currentUser becomes null
             else {
-                axios.post('http://localhost:5000/logout', {}, {
+                axios.post('https://job-portal-server-for-recruiter-part3-swart.vercel.app/logout', {}, {
                     withCredentials: true,
                 })
                     .then(res => {

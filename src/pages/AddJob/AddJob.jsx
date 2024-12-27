@@ -1,23 +1,25 @@
 import React from 'react';
 import Swal from 'sweetalert2';
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const AddJob = () => {
 
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const handleAddJob = e => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        // console.log(formData.entries())
+        console.log('formData entries', formData.entries())
         const initialData = Object.fromEntries(formData.entries());
-        // console.log(initialData)
+        console.log('initial data', initialData)
         const { min, max, currency, ...newJob } = initialData;
-        console.log(min, max, currency, newJob)
+        console.log({ min, max, currency, newJob })
         newJob.salaryRange = { min, max, currency }
         newJob.requirements = newJob.requirements.split('\n');
         newJob.responsibilities = newJob.responsibilities.split('\n')
-        console.log(newJob);
+        console.log('new job is', newJob);
 
         fetch('https://job-portal-server-for-recruiter-part3-swart.vercel.app/jobs', {
             method: 'POST',
@@ -90,10 +92,10 @@ const AddJob = () => {
                         <label className="label">
                             <span className="label-text">Salary Range</span>
                         </label>
-                        <input type="text" name='min' placeholder="Min" className="input input-bordered" required />
+                        <input type="number" name='min' placeholder="Min" className="input input-bordered" required />
                     </div>
                     <div className="form-control">
-                        <input type="text" name='max' placeholder="Max " className="input input-bordered" required />
+                        <input type="number" name='max' placeholder="Max " className="input input-bordered" required />
                     </div>
                     <div className="form-control">
                         <select defaultValue="Currency" name="currency" className="select select-ghost w-full max-w-xs">
@@ -137,7 +139,10 @@ const AddJob = () => {
                     <label className="label">
                         <span className="label-text">HR Name</span>
                     </label>
-                    <input type="text" name='hr_name' placeholder="HR Name" className="input input-bordered" required />
+                    <input type="text"
+
+                        disabled={true}
+                        name='hr_name' placeholder="HR Name" className="input input-bordered" required />
                 </div>
 
                 {/* HR Email */}
@@ -145,7 +150,9 @@ const AddJob = () => {
                     <label className="label">
                         <span className="label-text">HR Email</span>
                     </label>
-                    <input type="text" defaultValue={user?.email} name='hr_email' placeholder="HR Email" className="input input-bordered" required />
+                    <input type="text" defaultValue={user?.email}
+                        disabled={true}
+                        name='hr_email' placeholder="HR Email" className="input input-bordered" required />
                 </div>
                 {/* application Deadline */}
                 <div className="form-control">

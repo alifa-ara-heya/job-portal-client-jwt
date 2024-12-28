@@ -8,23 +8,28 @@ const AllJobs = () => {
     const [search, setSearch] = useState('');
     const [minSalary, setMinSalary] = useState('');
     const [maxSalary, setMaxSalary] = useState('');
-    const { jobs, loading } = UseJobs(sort, search, minSalary, maxSalary);
+    const [currentPage, setCurrentPage] = useState(1);
+    const { jobs, loading, totalPages } = UseJobs(sort, search, minSalary, maxSalary, currentPage);
     const handleReset = () => {
         setSort(false);
         setSearch('')
         setMaxSalary('')
         setMinSalary('')
+        setCurrentPage(1);
     }
 
+    const handlePageChange = page => {
+        setCurrentPage(page)
+    }
 
     if (loading) {
         return <h2>Data Loading...</h2>
     }
     return (
-        <div>
+        <div className="w-11/12 mx-auto py-5 p-3 ">
             <h1 className="text-3xl font-bold text-center">All Jobs: {jobs.length} </h1>
 
-            <div className="w-11/12 mx-auto py-5 p-3 flex items-center justify-evenly bg-base-200 gap-4 flex-col lg:flex-row">
+            <div className=" py-5 p-3 flex items-center justify-evenly bg-base-200 gap-4 flex-col lg:flex-row">
                 <button
                     onClick={() => { setSort(!sort) }}
                     className={`btn btn-neutral ${sort && 'btn-success'}`}>
@@ -58,10 +63,27 @@ const AllJobs = () => {
 
             </div>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-10' >
                 {
                     jobs.map(job => <HotJobCard key={job._id} job={job}></HotJobCard>)
                 }
+            </div>
+
+
+            <div className="join flex justify-center items-center">
+                {
+                    [...Array(totalPages)].map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handlePageChange(index + 1)}
+                            className={`join-item btn ${currentPage === index + 1 ? 'btn-active' : ''}`}
+                        >{index + 1}</button>
+                    ))
+                }
+
+                {/* <button className="join-item btn btn-active">2</button>
+                <button className="join-item btn">3</button>
+                <button className="join-item btn">4</button> */}
             </div>
         </div>
     );
